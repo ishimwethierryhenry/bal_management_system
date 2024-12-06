@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-transparent" lang="">
+<head>
+    <title th:text="#{title}">Update User | Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: transparent;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #1a365d, #2563eb, #1e40af, #3b82f6);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        #profilePicturePreview {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        #profilePicturePreview:hover {
+            transform: scale(1.1);
+        }
+
+        .icon {
+            font-size: 40px;
+            color: #0074d9;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #profilePicturePreview:hover .icon {
+            opacity: 1;
+        }
+
+        .camera-icon {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .download-icon {
+            bottom: 15px;
+            right: 15px;
+            color: #ffd700;
+        }
+
+        #profilePicture {
+            display: none;
+        }
+    </style>
+</head>
+<body class="animated-bg">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-xl mx-auto">
+        <div class="glass-effect rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <!-- Different back links based on user type -->
+                <div class="flex items-center mb-6">
+                    <a th:if="${!isUserProfile}" th:href="@{/admin/users}" class="text-blue-200 hover:text-blue-100 transition-colors duration-200 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span th:text="#{updateUser.backLink}">Back to User Management</span>
+                    </a>
+                    <a th:if="${isUserProfile}" th:href="@{/user_dashboard}" class="text-blue-200 hover:text-blue-100 transition-colors duration-200 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span th:text="#{updateUser.backLink}">Back to Dashboard</span>
+                    </a>
+                </div>
+
+                <!-- Different titles based on user type -->
+                <h2 th:if="${!isUserProfile}" class="text-3xl font-bold text-white text-center mb-8" th:text="#{updateUser.backLink}">Update User Information</h2>
+                <h2 th:if="${isUserProfile}" class="text-3xl font-bold text-white text-center mb-8" th:text="#{updateUser.title}">Update Your Profile</h2>
+
+                <!-- Admin Update Form -->
+                <form th:if="${!isUserProfile}"
+                      th:action="@{/admin/users/update/{id}(id=${user.id})}"
+                      th:object="${user}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="space-y-6">
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="flex justify-center">
+                        <div id="profilePicturePreview" onclick="openFileChooser()"
+                             th:style="'background-image: url(' + (${user.profilePicturePath} != null ? ${user.profilePicturePath} : '/images/default-profile.png') + ');'"
+                             class="w-32 h-32 rounded-full bg-white bg-opacity-20 flex items-center justify-center cursor-pointer hover:bg-opacity-30 transition-all duration-300 hover:shadow-lg transform hover:scale-105">
+                            <i class="fas fa-camera text-4xl text-blue-300 camera-icon"></i>
+                            <a th:if="${user.profilePicturePath != null}" th:href="${user.profilePicturePath}" download>
+                                <i class="fas fa-download icon download-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden" onchange="previewImage(event)">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- All admin form fields from the previous version -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.firstName}">First Name</label>
+                            <input type="text" th:field="*{firstName}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.lastName}">Last Name</label>
+                            <input type="text" th:field="*{lastName}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.email}">Email</label>
+                            <input type="email" th:field="*{email}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.dateOfBirth}">Date of Birth</label>
+                            <input type="date" th:field="*{dateOfBirth}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.username}">Username</label>
+                            <input type="text" th:field="*{username}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200">Password</label>
+                            <input type="password" th:field="*{password}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.phoneNumber}">Phone Number</label>
+                            <input type="text" th:field="*{phoneNumber}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200" th:text="#{updateUser.role}">Role</label>
+                            <select th:field="*{role}" required
+                                    class="block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select user role</option>
+                                <option value="USER">USER</option>
+                                <option value="ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pt-5">
+                        <button type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-save mr-2"></i>
+                            <span th:text="#{updateUser.saveChanges}">Save Changes</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- User Profile Update Form -->
+                <form th:if="${isUserProfile}"
+                      th:action="@{/user/profile/update}"
+                      th:object="${user}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="space-y-6">
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="flex justify-center">
+                        <div id="profilePicturePreview" onclick="openFileChooser()"
+                             th:style="'background-image: url(' + (${user.profilePicturePath} != null ? ${user.profilePicturePath} : '/images/default-profile.png') + ');'"
+                             class="w-32 h-32 rounded-full bg-white bg-opacity-20 flex items-center justify-center cursor-pointer hover:bg-opacity-30 transition-all duration-300 hover:shadow-lg transform hover:scale-105">
+                            <i class="fas fa-camera text-4xl text-blue-300 camera-icon"></i>
+                            <a th:if="${user.profilePicturePath != null}" th:href="${user.profilePicturePath}" download>
+                                <i class="fas fa-download icon download-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden" onchange="previewImage(event)">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">First Name</label>
+                            <input type="text" th:field="*{firstName}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Last Name</label>
+                            <input type="text" th:field="*{lastName}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200">Username</label>
+                            <input type="text" th:field="*{username}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200">Phone Number</label>
+                            <input type="text" th:field="*{phoneNumber}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200">Email</label>
+                            <input type="email" th:field="*{email}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-blue-200">Date of Birth</label>
+                            <input type="date" th:field="*{dateOfBirth}" required
+                                   class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+
+                        <!-- Hidden role field for user profile -->
+                        <input type="hidden" th:field="*{role}"/>
+                    </div>
+
+                    <div class="pt-5">
+                        <button type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-save mr-2"></i>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function openFileChooser() {
+        document.getElementById('profilePicture').click();
+    }
+
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('profilePicturePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('togglePassword');
+
+        // Check the current type of the password input
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text'; // Change to text to show the password
+            toggleIcon.classList.remove('fa-eye'); // Change icon to 'eye-slash'
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password'; // Change back to password
+            toggleIcon.classList.remove('fa-eye-slash'); // Change icon back to 'eye'
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+</script>
+</body>
+
+</html>

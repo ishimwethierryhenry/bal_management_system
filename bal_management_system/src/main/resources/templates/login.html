@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>React App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-blue-600 min-h-screen">
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl w-full flex bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Login Form Section -->
+        <div class="w-full md:w-1/2 p-8 space-y-6 bg-white">
+            <div class="text-center space-y-2">
+                <h1 class="text-3xl font-bold text-gray-900" th:text="#{login.welcome}">Welcome back</h1>
+                <h3 class="text-xl text-gray-600" th:text="#{login.page}">LOGIN PAGE</h3>
+                <p class="text-gray-500" th:text="#{login.enterDetails}">Please Enter your Account details</p>
+            </div>
+
+            <form th:action="@{/login}" method="post" th:object="${user}" class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700" th:text="#{login.username}">Username</label>
+                    <input type="text" id="username" th:field="*{username}" required
+                           class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700" th:text="#{login.password}">Password</label>
+                    <input type="password" id="password" th:field="*{password}" required
+                           class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="keep-logged-in" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="keep-logged-in" class="ml-2 block text-sm text-gray-700" th:text="#{login.keepLoggedIn}">Keep me logged in</label>
+                    </div>
+                    <a th:href="@{/forgot-password}" class="text-sm text-blue-600 hover:text-blue-500" th:text="#{login.forgotPassword}">Forgot Password?</a>
+                </div>
+
+                <button type="submit" th:text="#{login.submit}"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Log in
+                </button>
+
+                <div th:if="${error}" th:text="${error}" class="text-red-600 text-center"></div>
+
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500" th:text="#{login.orLoginWith}">Or login with</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-3 gap-3">
+                        <a th:href="@{/oauth2/authorization/github}" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a th:href="@{/oauth2/authorization/facebook}" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-facebook text-xl text-blue-600"></i>
+                        </a>
+                        <a th:href="@{/oauth2/authorization/gmail}" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-google text-xl text-red-600"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <a th:href="@{/register}" class="text-blue-600 hover:text-blue-500" th:text="#{login.newMember}">New Member?</a>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a th:href="@{/}" class="text-gray-600 hover:text-gray-500" th:text="#{login.backToLanding}">Back to the Landing Page</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Image Section -->
+        <div class="hidden md:block w-1/2 bg-cover bg-center relative overflow-hidden">
+            <img src="images/bal_image.jpeg" alt="Basketball Africa League"
+                 class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-700 hover:scale-110">
+        </div>
+    </div>
+</div>
+</body>
+</html>

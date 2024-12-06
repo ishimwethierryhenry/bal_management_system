@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>React App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-blue-600 min-h-screen py-12">
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl w-full flex bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Registration Form Section -->
+        <div class="w-full md:w-1/2 p-8 space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-bold text-gray-900" th:text="#{register.welcome}">Welcome to the Basketball Africa League</h2>
+                <p class="text-gray-600" th:text="#{register.fillForm}">Please fill out the Form</p>
+            </div>
+
+            <form th:action="@{/register}" th:object="${user}" method="post" enctype="multipart/form-data" class="space-y-4">
+                <div class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700" th:text="#{register.email}">Email</label>
+                        <input type="email" id="email" th:field="*{email}" required
+                               class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium text-gray-700" th:text="#{register.firstName}">First Name</label>
+                            <input type="text" id="firstName" th:field="*{firstName}" required
+                                   class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium text-gray-700" th:text="#{register.lastName}">Last Name</label>
+                            <input type="text" id="lastName" th:field="*{lastName}" required
+                                   class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700" th:text="#{register.username}">Username</label>
+                        <input type="text" id="username" th:field="*{username}" required
+                               class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700" th:text="#{register.password}">Password</label>
+                        <input type="password" id="password" th:field="*{password}" required
+                               class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="dateOfBirth" class="block text-sm font-medium text-gray-700" th:text="#{register.dateOfBirth}">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required
+                               class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="phoneNumber" class="block text-sm font-medium text-gray-700" th:text="#{register.phoneNumber}">Phone Number</label>
+                        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required
+                               class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="profilePicture" class="block text-sm font-medium text-gray-700" th:text="#{register.profilePicture}">Profile Picture</label>
+                        <input type="file" id="profilePicture" name="profilePicture" accept="image/jpeg, image/png"
+                               class="mt-1 block w-full px-3 py-2 text-gray-700">
+                    </div>
+
+                    <div>
+                        <label for="userRole" class="block text-sm font-medium text-gray-700" th:text="#{register.role}">ROLE</label>
+                        <select id="userRole" th:field="*{role}" required
+                                class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" disabled selected th:text="#{register.selectRole}">Select your role</option>
+                            <option value="ADMIN" th:text="#{register.admin}">ADMIN</option>
+                            <option value="USER" th:text="#{register.user}">USER</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div th:if="${error}" th:text="${error}" class="text-red-600 text-center"></div>
+
+                <button type="submit" th:text="#{register.register}"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Register
+                </button>
+
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500" th:text="#{register.socialRegister}">Or register with</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-3 gap-3">
+                        <a href="your_github_registration_url" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="your_facebook_registration_url" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-facebook text-xl text-blue-600"></i>
+                        </a>
+                        <a href="your_google_registration_url" class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <i class="fab fa-google text-xl text-red-600"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a th:href="@{/login}" class="text-blue-600 hover:text-blue-500" th:text="#{register.loginPrompt}">Already have an account? Log In</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Section -->
+        <div class="hidden md:block w-1/2 bg-blue-600 p-12 text-white">
+            <div class="h-full flex flex-col justify-center space-y-6">
+                <h3 class="text-3xl font-bold" th:text="#{register.description}">Welcome to the Basketball Africa League</h3>
+                <blockquote class="text-xl italic" th:text="#{register.description}">
+                    "The Basketball Africa League (BAL) is the premier professional basketball league in Africa, showcasing the continent's top talent.
+                    Join us to experience thrilling matches, discover your favorite teams, and connect with a vibrant basketball community."
+                </blockquote>
+                <p class="text-lg" th:text="#{register.memberBenefits}">
+                    As a member, you will get access to exclusive content, live game updates, and player statistics. Don't miss out on the action—register now and be part of the basketball revolution in Africa!
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button class="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors">&lt;</button>
+                    <button class="p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors">&gt;</button>
+                </div>
+                <p class="text-center text-lg font-semibold" th:text="#{register.registerPrompt}">
+                    Register today to follow your favorite teams and players!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

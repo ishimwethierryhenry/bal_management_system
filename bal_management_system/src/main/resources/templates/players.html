@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <title th:text="#{title}">Players | Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #001f3f, #0074d9);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        header h1, footer p {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .players-list {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .player-item {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px;
+            width: 80%;
+            text-align: left;
+        }
+        .cta-buttons {
+            margin-top: 30px;
+        }
+        .cta-buttons a {
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 20px;
+            background-color: #ff758c;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 th:text="#{header.title}">Players</h1>
+</header>
+
+<div class="content">
+    <h2 th:text="#{content.meetPlayers}">Meet Our Players</h2>
+    <p th:text="#{content.description}">Explore the talented players of the Basketball Africa League .</p>
+
+    <div class="players-list">
+        <div class="player-item">
+            <strong th:text="#{players.player1}">Player 1</strong><br>
+            <span th:text="#{players.player1.team}">Team: Team A</span><br>
+            <span th:text="#{players.player1.position}">Position: Guard</span>
+        </div>
+        <div class="player-item">
+            <strong th:text="#{players.player2}">Player 2</strong><br>
+            <span th:text="#{players.player2.team}">Team: Team B</span><br>
+            <span th:text="#{players.player2.position}">Position: Forward</span>
+        </div>
+        <!-- Add more player items as needed -->
+    </div>
+
+    <div class="cta-buttons">
+        <a th:href="@{/home}" th:text="#{cta.home}">HOME</a>
+        <a th:href="@{/register}" th:text="#{cta.joinCommunity}">Join the BAL Community</a>
+        <a th:href="@{/stats}" th:text="#{cta.viewStats}">View Stats</a>
+    </div>
+</div>
+
+<footer>
+    <p th:text="#{footer.copyright}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

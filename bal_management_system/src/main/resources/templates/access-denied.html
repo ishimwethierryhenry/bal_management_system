@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>React App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- React favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .react-spin {
+            animation: spin 20s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-blue-600 min-h-screen">
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl w-full flex bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <!-- Left Content Section -->
+        <div class="w-full md:w-1/2 p-10 flex flex-col justify-center bg-white min-h-[600px]">
+            <!-- React Logo -->
+            <div class="flex justify-center mb-6">
+                <svg class="w-16 h-16 react-spin text-blue-500" viewBox="-11.5 -10.23174 23 20.46348">
+                    <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
+                    <g stroke="#61dafb" stroke-width="1" fill="none">
+                        <ellipse rx="11" ry="4.2"/>
+                        <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+                        <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+                    </g>
+                </svg>
+            </div>
+
+            <h1 class="text-3xl font-bold text-center text-gray-900 mb-4" th:text="#{access.denied.title}">
+                Access Denied
+            </h1>
+
+            <p class="text-center text-gray-500 mb-8" th:text="#{access.denied.message}">
+                You do not have permission to access this resource right now. You need to log in first.
+            </p>
+
+            <!-- React-styled Button -->
+            <a th:href="@{/login}"
+               class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md
+                          shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
+                          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                          transition-all duration-200 transform hover:-translate-y-0.5"
+               th:text="#{access.denied.returnToLogin}">
+                Return to Login
+            </a>
+
+            <div class="text-center mt-6">
+                <a th:href="@{/login}"
+                   class="text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                    Back to home
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Image Section -->
+        <div class="hidden md:block md:w-1/2 relative">
+            <img src="images/bal_image.jpeg"
+                 alt="Basketball Africa League"
+                 class="w-full h-full object-cover">
+        </div>
+    </div>
+</div>
+</body>
+</html>

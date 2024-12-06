@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stats | Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,...">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #001f3f, #0074d9);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        header h1, footer p {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .stats-table {
+            margin-top: 30px;
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .stats-table th, .stats-table td {
+            border: 1px solid #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .cta-buttons {
+            margin-top: 30px;
+        }
+        .cta-buttons a {
+            padding: 12px 25px;
+            margin: 0 10px;
+            border-radius: 20px;
+            background-color: #ff758c;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Player Stats</h1>
+</header>
+
+<div class="content">
+    <h2>Statistics Overview</h2>
+    <p>Explore the statistics of players in the Basketball Africa League.</p>
+
+    <table class="stats-table">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Points</th>
+            <th>Assists</th>
+            <th>Rebounds</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Nshobzwabyosenumukiza Jean Jacques Wilson</td>
+            <td>APR</td>
+            <td>20</td>
+            <td>5</td>
+            <td>7</td>
+        </tr>
+        <tr>
+            <td>Kazingufu Ali</td>
+            <td>REG</td>
+            <td>15</td>
+            <td>8</td>
+            <td>6</td>
+        </tr>
+        <!-- Add more player stats as needed -->
+        </tbody>
+    </table>
+
+    <div class="cta-buttons">
+        <a href="/home">HOME</a>
+        <a href="/register">Join the BAL Community</a>
+        <a href="/players">View Players</a>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
