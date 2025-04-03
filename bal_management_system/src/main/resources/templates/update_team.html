@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Update Team - Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/bal_image.jpeg}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-xl mx-auto">
+        <div class="glass-effect rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center mb-6">
+                    <a href="/admin/teams" class="text-blue-200 hover:text-blue-100 transition-colors duration-200 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        <span>Back to Team Management</span>
+                    </a>
+                </div>
+
+                <h2 class="text-3xl font-bold text-white text-center mb-8">Update Team</h2>
+
+                <div th:if="${error}" class="bg-red-600 text-white p-4 rounded-md mb-6 text-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <div class="text-blue-200 text-sm mb-6 text-center">
+                    <p>
+                        <strong th:text="#{label.createdAt}">Created At:</strong>
+                        <span th:text="${#temporals.format(team.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </p>
+                    <p th:if="${team.updatedAt != null}">
+                        <strong th:text="#{label.lastUpdated}">Last Updated:</strong>
+                        <span th:text="${#temporals.format(team.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                    </p>
+                </div>
+
+                <form th:action="@{/admin/teams/update/{id}(id=${team.id})}" th:object="${team}" method="post" class="space-y-6">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{createdAt}">
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200" th:for="name">Team Name *</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-basketball-ball text-gray-400"></i>
+                            </div>
+                            <input type="text" id="name" th:field="*{name}" required
+                                   th:placeholder="#{placeholder.enterTeamName}" maxlength="100"
+                                   class="block w-full pl-10 glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200" th:for="country">Country *</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-globe text-gray-400"></i>
+                            </div>
+                            <input type="text" id="country" th:field="*{country}" required
+                                   th:placeholder="#{placeholder.enterTeamCountry}" maxlength="100"
+                                   class="block w-full pl-10 glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200" th:for="coach">Coach</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user-tie text-gray-400"></i>
+                            </div>
+                            <input type="text" id="coach" th:field="*{coach}"
+                                   th:placeholder="#{placeholder.enterTeamCoach}" maxlength="100"
+                                   class="block w-full pl-10 glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200" th:for="description">Description</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <textarea id="description" th:field="*{description}"
+                                      th:placeholder="#{placeholder.enterTeamDescription}" rows="4" maxlength="500"
+                                      class="block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="pt-5">
+                        <div class="flex justify-between">
+                            <a th:href="@{/admin/teams}"
+                               class="flex items-center text-blue-300 hover:text-blue-200 transition-colors">
+                                <i class="fas fa-times mr-2"></i>
+                                <span>Cancel</span>
+                            </a>
+                            <button type="submit"
+                                    class="flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-save mr-2"></i>
+                                <span>Update Team</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const inputs = this.querySelectorAll('input[required], textarea[required]');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (!input.value) {
+                valid = false;
+                input.classList.add('ring-2', 'ring-red-500');
+
+                input.addEventListener('input', function() {
+                    this.classList.remove('ring-2', 'ring-red-500');
+                }, { once: true });
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>

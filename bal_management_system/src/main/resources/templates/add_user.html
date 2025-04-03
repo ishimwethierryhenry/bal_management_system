@@ -1,83 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-full" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Add New User - Basketball Africa League</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/bal_image.jpeg}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
         }
-
-        html, body {
-            background-color: transparent;
-            overflow-x: hidden;
-        }
-
-        .animated-bg {
-            background: linear-gradient(-45deg, #1a365d, #2563eb, #1e40af, #3b82f6);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
         .glass-effect {
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(16px) saturate(180%);
             background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        @media (max-width: 640px) {
-            .mobile-menu {
-                display: none;
-            }
-
-            .mobile-menu.active {
-                display: block;
-            }
         }
     </style>
 </head>
-<body class="h-full animated-bg overflow-x-hidden">
-<!-- Mobile-friendly Navbar -->
-<nav class="glass-effect sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex items-center">
-                <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
-                <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
-                <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
-            </div>
-
-            <!-- Desktop Navigation -->
-            <div class="hidden sm:flex space-x-4">
-                <a href="/home" class="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md transition-all duration-300">Home</a>
-                <a href="/admin/users" class="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md transition-all duration-300">User Management</a>
-                <a href="/logout" class="text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md transition-all duration-300">Logout</a>
-            </div>
-
-            <!-- Mobile Menu Button -->
-            <div class="sm:hidden">
-                <button onclick="toggleMobileMenu()" class="text-white p-2">
-                    <i class="fas fa-bars"></i>
-                </button>
+<body class="min-h-screen flex flex-col">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
             </div>
         </div>
+    </nav>
+</header>
 
-        <!-- Mobile Navigation -->
-        <div id="mobileMenu" class="mobile-menu sm:hidden pb-4">
-            <a href="/home" class="block text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md my-1">Home</a>
-            <a href="/admin/users" class="block text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md my-1">User Management</a>
-            <a href="/logout" class="block text-white hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-md my-1">Logout</a>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content -->
-<div class="py-6 px-4 sm:px-6 lg:px-8 bg-transparent">
+<main class="flex-grow container mx-auto px-4 py-8">
     <div class="max-w-xl mx-auto">
         <div class="glass-effect rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
             <div class="px-4 py-5 sm:p-6">
@@ -91,7 +48,6 @@
                 <h2 class="text-3xl font-bold text-white text-center mb-8">Add New User</h2>
 
                 <form action="/admin/users/add" method="post" enctype="multipart/form-data" class="space-y-6">
-                    <!-- Profile Picture Preview with Animation -->
                     <div class="flex justify-center">
                         <div id="profilePicturePreview" onclick="openFileChooser()"
                              class="w-32 h-32 rounded-full bg-white bg-opacity-20 flex items-center justify-center cursor-pointer hover:bg-opacity-30 transition-all duration-300 hover:shadow-lg transform hover:scale-105">
@@ -100,7 +56,6 @@
                     </div>
                     <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden" onchange="previewImage(event)">
 
-                    <!-- Responsive Grid Layout -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-blue-200">First Name</label>
@@ -115,7 +70,7 @@
                         </div>
 
                         <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium text-blue-200">Email</label>
+                            <label class="block text-sm font-medium text-blue-200">Email </label>
                             <input type="email" name="email" required
                                    class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         </div>
@@ -186,7 +141,8 @@
 
                     <div class="pt-5">
                         <button type="submit"
-                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 ```html
+                                    focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
                             <i class="fas fa-user-plus mr-2"></i>
                             <span>Register</span>
                         </button>
@@ -195,17 +151,15 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 
-<!-- Enhanced Scripts -->
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p>&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
+
 <script>
-    // Mobile menu toggle
-    function toggleMobileMenu() {
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenu.classList.toggle('active');
-    }
-
-    // Profile picture preview with loading animation
     function openFileChooser() {
         document.getElementById('profilePicture').click();
     }
@@ -217,8 +171,6 @@
 
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-
-            // Add loading animation
             cameraIcon.className = 'fas fa-spinner fa-spin text-4xl text-blue-300';
 
             reader.onload = function(e) {
@@ -232,7 +184,6 @@
         }
     }
 
-    // Password visibility toggle
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         const toggleIcon = document.getElementById('togglePassword');
@@ -246,7 +197,6 @@
         }
     }
 
-    // Form validation feedback
     document.querySelector('form').addEventListener('submit', function(event) {
         const inputs = this.querySelectorAll('input[required], select[required]');
         let valid = true;
@@ -256,7 +206,6 @@
                 valid = false;
                 input.classList.add('ring-2', 'ring-red-500');
 
-                // Remove error styling after user starts typing
                 input.addEventListener('input', function() {
                     this.classList.remove('ring-2', 'ring-red-500');
                 }, { once: true });

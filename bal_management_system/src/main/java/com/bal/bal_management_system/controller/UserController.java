@@ -2,7 +2,9 @@
 
 package com.bal.bal_management_system.controller;
 
+import com.bal.bal_management_system.model.Team;
 import com.bal.bal_management_system.model.UserEntity;
+import com.bal.bal_management_system.service.TeamService;
 import com.bal.bal_management_system.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -18,11 +20,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 @Controller
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
 
     // Landing Page
     @GetMapping("/")
@@ -36,11 +50,11 @@ public class UserController {
         return "aboutBal";
     }
 
-    // Matches Page
-    @GetMapping("/matches")
-    public String showMatchesPage() {
-        return "matches";
-    }
+//    // Matches Page
+//    @GetMapping("/matches")
+//    public String showMatchesPage() {
+//        return "matches";
+//    }
 
     // Standings Page
     @GetMapping("/standings")
@@ -55,16 +69,16 @@ public class UserController {
     }
 
     // Players Page
-    @GetMapping("/players")
-    public String showPlayersPage() {
-        return "players";
-    }
+//    @GetMapping("/players")
+//    public String showPlayersPage() {
+//        return "players";
+//    }
 
     // Gallery Page
-    @GetMapping("/gallery")
-    public String showGalleryPage() {
-        return "gallery";
-    }
+//    @GetMapping("/gallery")
+//    public String showGalleryPage() {
+//        return "gallery";
+//    }
 
     // Registration Form
     @GetMapping("/register")
@@ -73,7 +87,6 @@ public class UserController {
         return "register";
     }
 
-    // Registration Process
     @PostMapping("/register")
     public String registerUser (@ModelAttribute("user") UserEntity user,
                                 @RequestParam("profilePicture") MultipartFile file,
@@ -91,7 +104,7 @@ public class UserController {
 
             // File upload logic
             try {
-                String uploadDir = "C:/Users/USER/Documents/Uploads/";
+                String uploadDir = "/home/ec2-user/Uploads/"; // New directory
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename(); // Avoid filename collisions
                 String filePath = uploadDir + fileName;
                 File destFile = new File(filePath);
@@ -111,6 +124,8 @@ public class UserController {
         model.addAttribute("message", "Registration successful");
         return "redirect:/login";
     }
+
+
 
     // Login Form
     @GetMapping("/login")
@@ -143,16 +158,52 @@ public class UserController {
                 System.out.println("Login - Last Name: " + fullUser.getLastName());
 
                 if ("ADMIN".equalsIgnoreCase(role)) {
-//                    return "admin_dashboard";
                     return "redirect:/admin/users/dashboard"; // Redirect to admin dashboard
-
                 } else if ("USER".equalsIgnoreCase(role)) {
-                    return "user_dashboard";
+                    return "redirect:/users/dashboard"; // Redirect to user dashboard
                 }
             }
         }
         model.addAttribute("error", "Invalid username or password");
         return "login";
+    }
+
+    @GetMapping("/users/dashboard")
+    public String showUserDashboard(HttpSession session, Model model) {
+        // Get the complete user object from session
+        UserEntity loggedInUser = (UserEntity) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            // If no user in session, try to retrieve from database using username
+            String username = (String) session.getAttribute("username");
+            if (username != null) {
+                Optional<UserEntity> userOpt = userService.findByUsername(username);
+                if (userOpt.isPresent()) {
+                    loggedInUser = userOpt.get();
+                    session.setAttribute("loggedInUser", loggedInUser);
+                } else {
+                    return "redirect:/login";
+                }
+            } else {
+                return "redirect:/login";
+            }
+        }
+
+        // Debug prints
+        System.out.println("Dashboard - Username: " + loggedInUser.getUsername());
+        System.out.println("Dashboard - First Name: " + loggedInUser.getFirstName());
+        System.out.println("Dashboard - Last Name: " + loggedInUser.getLastName());
+        System.out.println("Dashboard - Role: " + loggedInUser.getRole());
+
+        // Add user information to model
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("fullName",
+                loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+        model.addAttribute("profilePicture",
+                loggedInUser.getProfilePicturePath() != null ?
+                        loggedInUser.getProfilePicturePath() : "/api/placeholder/80/80");
+
+        return "user_dashboard";
     }
 
     // Home Page
@@ -259,6 +310,40 @@ public class UserController {
     public String showUserStandingsPage() {
         // Simply return the standings view
         return "standings"; // This will render the standings.html template
+    }
+
+    @GetMapping("/user/teams")
+    public String showUserTeamList(
+            @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            Model model) {
+
+        int pageSize = 5;
+
+        Pageable pageable;
+        if (sortBy != null && !sortBy.isEmpty()) {
+            Sort sort = sortDir.equalsIgnoreCase("asc") ?
+                    Sort.by(sortBy).ascending() :
+                    Sort.by(sortBy).descending();
+            pageable = PageRequest.of(page, pageSize, sort);
+        } else {
+            pageable = PageRequest.of(page, pageSize);
+        }
+
+        Page<Team> teamPage = teamService.findTeams(search, pageable);
+
+        model.addAttribute("teams", teamPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", teamPage.getTotalPages());
+        model.addAttribute("totalTeams", teamPage.getTotalElements());
+        model.addAttribute("search", search);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return "user_teams"; // This should be a new Thymeleaf template for user team view
     }
 
     // Add these methods to your UserController class

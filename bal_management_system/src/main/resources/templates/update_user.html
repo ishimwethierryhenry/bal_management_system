@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" class="h-full bg-transparent" lang="">
+<html xmlns:th="http://www.thymeleaf.org" class="h-full" lang="en">
 <head>
     <title th:text="#{title}">Update User | Basketball Africa League</title>
     <meta charset="UTF-8">
@@ -11,20 +11,11 @@
         html, body {
             height: 100%;
             margin: 0;
-            background: transparent;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .animated-bg {
-            background: linear-gradient(-45deg, #1a365d, #2563eb, #1e40af, #3b82f6);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+        body {
             min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
         }
 
         .glass-effect {
@@ -82,7 +73,7 @@
         }
     </style>
 </head>
-<body class="animated-bg">
+<body class="min-h-screen bg-gradient-to-r from-gray-900 to-gray-800 text-gray-100 flex flex-col">
 <header>
     <nav class="glass-effect sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,6 +83,14 @@
                     <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
                     <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
                 </div>
+
+                <div th:if="${isAdmin}">
+                    <nav th:replace="~{fragments/nav :: nav}"></nav>
+                </div>
+                <div th:unless="${isAdmin}">
+                    <nav th:replace="~{fragments/user_nav :: nav}"></nav>
+                </div>
+
             </div>
         </div>
     </nav>
@@ -275,7 +274,14 @@
             </div>
         </div>
     </div>
+
 </div>
+
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
 
 
 

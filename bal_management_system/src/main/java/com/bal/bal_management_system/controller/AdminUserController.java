@@ -46,6 +46,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
+
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
@@ -96,6 +100,7 @@ public class AdminUserController {
         return "add_user";
     }
 
+    // Update the addUser method:
     @PostMapping("/add")
     public String addUser (@ModelAttribute("user") UserEntity user,
                            @RequestParam("profilePicture") MultipartFile file,
@@ -113,7 +118,7 @@ public class AdminUserController {
 
         if (!file.isEmpty()) {
             try {
-                String uploadDir = "C:/Users/USER/Documents/Uploads/";
+                String uploadDir = "/home/ec2-user/Uploads/"; // New directory
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 String filePath = uploadDir + fileName;
                 File destFile = new File(filePath);

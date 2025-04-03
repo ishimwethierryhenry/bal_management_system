@@ -1,0 +1,331 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Edit Image - Basketball Africa League</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        .animated-bg {-->
+<!--            background: linear-gradient(-45deg, #1a365d, #2563eb, #1e40af, #3b82f6);-->
+<!--            background-size: 400% 400%;-->
+<!--            animation: gradientBG 15s ease infinite;-->
+<!--            min-height: 100vh;-->
+<!--        }-->
+
+<!--        @keyframes gradientBG {-->
+<!--            0% { background-position: 0% 50%; }-->
+<!--            50% { background-position: 100% 50%; }-->
+<!--            100% { background-position: 0% 50%; }-->
+<!--        }-->
+
+<!--        .glass-effect {-->
+<!--            backdrop-filter: blur(16px) saturate(180%);-->
+<!--            background-color: rgba(255, 255, 255, 0.1);-->
+<!--        }-->
+
+<!--        #imagePreview {-->
+<!--            width: 300px;-->
+<!--            height: 200px;-->
+<!--            margin: 20px auto;-->
+<!--            background-color: #ccc;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            position: relative;-->
+<!--            cursor: pointer;-->
+<!--            background-size: cover;-->
+<!--            background-position: center;-->
+<!--            overflow: hidden;-->
+<!--            transition: transform 0.4s ease;-->
+<!--            border-radius: 8px;-->
+<!--        }-->
+
+<!--        #imagePreview:hover {-->
+<!--            transform: scale(1.05);-->
+<!--        }-->
+
+<!--        .icon {-->
+<!--            font-size: 40px;-->
+<!--            color: #ffffff;-->
+<!--            position: absolute;-->
+<!--            opacity: 0;-->
+<!--            transition: opacity 0.3s ease;-->
+<!--        }-->
+
+<!--        #imagePreview:hover .icon {-->
+<!--            opacity: 0.8;-->
+<!--        }-->
+
+<!--        .camera-icon {-->
+<!--            top: 50%;-->
+<!--            left: 50%;-->
+<!--            transform: translate(-50%, -50%);-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="animated-bg">-->
+<!--<div class="py-6 px-4 sm:px-6 lg:px-8">-->
+<!--    <div class="max-w-xl mx-auto">-->
+<!--        <div class="glass-effect rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">-->
+<!--            <div class="px-4 py-5 sm:p-6">-->
+<!--                &lt;!&ndash; Back Link &ndash;&gt;-->
+<!--                <div class="flex items-center mb-6">-->
+<!--                    <a href="/admin/gallery" class="text-blue-200 hover:text-blue-100 transition-colors duration-200 flex items-center">-->
+<!--                        <i class="fas fa-arrow-left mr-2"></i>-->
+<!--                        Back to Gallery-->
+<!--                    </a>-->
+<!--                </div>-->
+
+<!--                <h2 class="text-3xl font-bold text-white text-center mb-8">Edit Image</h2>-->
+
+<!--                <form th:action="@{/admin/gallery/edit/{id}(id=${image.id})}"-->
+<!--                      method="post"-->
+<!--                      enctype="multipart/form-data"-->
+<!--                      class="space-y-6">-->
+
+<!--                    &lt;!&ndash; Image Preview &ndash;&gt;-->
+<!--                    <div class="flex justify-center">-->
+<!--                        <div id="imagePreview"-->
+<!--                             onclick="openFileChooser()"-->
+<!--                             th:style="'background-image: url(' + ${image.imagePath} + ');'"-->
+<!--                             class="w-full max-w-md h-48 bg-gray-700 bg-opacity-50 flex items-center justify-center cursor-pointer hover:bg-opacity-70 transition-all duration-300 hover:shadow-lg">-->
+<!--                            <i class="fas fa-camera text-4xl text-blue-300 icon camera-icon"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <input type="file"-->
+<!--                           id="file"-->
+<!--                           name="file"-->
+<!--                           accept="image/*"-->
+<!--                           class="hidden"-->
+<!--                           onchange="previewImage(event)">-->
+
+<!--                    &lt;!&ndash; Title Input &ndash;&gt;-->
+<!--                    <div>-->
+<!--                        <label class="block text-sm font-medium text-blue-200">Title</label>-->
+<!--                        <input type="text"-->
+<!--                               id="title"-->
+<!--                               name="title"-->
+<!--                               th:value="${image.title}"-->
+<!--                               required-->
+<!--                               class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus ```html-->
+<!--                               border-blue-500">-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Description Input &ndash;&gt;-->
+<!--                    <div>-->
+<!--                        <label class="block text-sm font-medium text-blue-200">Description</label>-->
+<!--                        <textarea id="description"-->
+<!--                                  name="description"-->
+<!--                                  rows="4"-->
+<!--                                  required-->
+<!--                                  class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+<!--                                  th:text="${image.description}"></textarea>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Submit Buttons &ndash;&gt;-->
+<!--                    <div class="flex justify-between space-x-4">-->
+<!--                        <a href="/admin/gallery"-->
+<!--                           class="flex-1 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 text-center">-->
+<!--                            Cancel-->
+<!--                        </a>-->
+<!--                        <button type="submit"-->
+<!--                                class="flex-1 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">-->
+<!--                            <i class="fas fa-save mr-2"></i>-->
+<!--                            Save Changes-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function openFileChooser() {-->
+<!--        document.getElementById('file').click();-->
+<!--    }-->
+
+<!--    function previewImage(event) {-->
+<!--        const input = event.target;-->
+<!--        const preview = document.getElementById('imagePreview');-->
+
+<!--        if (input.files && input.files[0]) {-->
+<!--            const reader = new FileReader();-->
+<!--            reader.onload = function(e) {-->
+<!--                preview.style.backgroundImage = `url(${e.target.result})`;-->
+<!--            };-->
+<!--            reader.readAsDataURL(input.files[0]);-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Edit Image - Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/bal_image.jpeg}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        #imagePreview {
+            width: 300px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+            border-radius: 8px;
+        }
+        #imagePreview:hover {
+            transform: scale(1.05);
+        }
+        .icon {
+            font-size: 40px;
+            color: #ffffff;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #imagePreview:hover .icon {
+            opacity: 0.8;
+        }
+        .camera-icon {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-xl mx-auto">
+        <div class="glass-effect rounded-xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center mb-6">
+                    <a href="/admin/gallery" class="text-blue-200 hover:text-blue-100 transition-colors duration-200 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Gallery
+                    </a>
+                </div>
+
+                <h2 class="text-3xl font-bold text-white text-center mb-8">Edit Image</h2>
+
+                <form th:action="@{/admin/gallery/edit/{id}(id=${image.id})}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="space-y-6">
+
+                    <div class="flex justify-center">
+                        <div id="imagePreview"
+                             onclick="openFileChooser()"
+                             th:style="'background-image: url(' + ${image.imagePath} + ');'"
+                             class="w-full max-w-md h-48 bg-gray-700 bg-opacity-50 flex items-center justify-center cursor-pointer hover:bg-opacity-70 transition-all duration-300 hover:shadow-lg">
+                            <i class="fas fa-camera text-4xl text-blue-300 icon camera-icon"></i>
+                        </div>
+                    </div>
+                    <input type="file"
+                           id="file"
+                           name="file"
+                           accept="image/*"
+                           class="hidden"
+                           onchange="previewImage(event)">
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200">Title</label>
+                        <input type="text"
+                               id="title"
+                               name="title"
+                               th:value="${image.title}"
+                               required
+                               class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200">Description</label>
+                        <textarea id="description"
+                                  name="description"
+                                  rows="4"
+                                  required
+                                  class="mt-1 block w-full glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  th:text="${image.description}"></textarea>
+                    </div>
+
+                    <div class="flex justify-between space-x-4">
+                        <a href="/admin/gallery"
+                           class="flex-1 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-300 text-center">
+                            Cancel
+                        </a>
+                        <button type="submit"
+                                class="flex-1 py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
+                            <i class="fas fa-save mr-2"></i>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function openFileChooser() {
+        document.getElementById('file').click();
+    }
+
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+</body>
+</html>

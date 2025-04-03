@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Team Management - Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/bal_image.jpeg}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="glass-effect rounded-xl shadow-2xl overflow-hidden">
+            <div class="px-4 py-5 sm:p-6">
+                <h2 class="text-3xl font-bold text-white text-center mb-8">Team Management</h2>
+
+                <!-- Search and Add Team Section -->
+                <div class="flex flex-col sm:flex-row justify-between mb-6 space-y-4 sm:space-y-0">
+                    <!-- Search Form -->
+                    <form th:action="@{/admin/teams}" method="get" class="flex-grow sm:mr-4">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" name="search" th:value="${search}"
+                                   th:placeholder="#{search.placeholder}"
+                                   class="block w-full pl-10 glass-effect border border-transparent rounded-md shadow-sm py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </form>
+
+                    <!-- Add Team Button -->
+                    <a th:href="@{/admin/teams/add}"
+                       class="w-full sm:w-auto flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-plus-circle mr-2"></i>
+                        <span>Add New Team</span>
+                    </a>
+                </div>
+
+                <!-- Teams Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-white">
+                        <thead>
+                        <tr class="border-b border-white border-opacity-20">
+                            <th class="py-3 px-4 text-left">
+                                <a th:href="@{/admin/teams(sortBy='name', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}"
+                                   class="flex items-center hover:text -blue-300 transition-colors">
+                                    <span>Name</span>
+                                    <span th:text="${sortBy == 'name' ? (sortDir == 'asc' ? '▲' : '▼') : ''}" class="ml-2"></span>
+                                </a>
+                            </th>
+                            <th class="py-3 px-4 text-left">
+                                <a th:href="@{/admin/teams(sortBy='country', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}"
+                                   class="flex items-center hover:text-blue-300 transition-colors">
+                                    <span>Country</span>
+                                    <span th:text="${sortBy == 'country' ? (sortDir == 'asc' ? '▲' : '▼') : ''}" class="ml-2"></span>
+                                </a>
+                            </th>
+                            <th class="py-3 px-4 text-left">Coach</th>
+                            <th class="py-3 px-4 text-center">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="team : ${teams}" class="border-b border-white border-opacity-10 hover:bg-white hover:bg-opacity-10 transition-colors">
+                            <td th:text="${team.name}" class="py-3 px-4"></td>
+                            <td th:text="${team.country}" class="py-3 px-4"></td>
+                            <td th:text="${team.coach}" class="py-3 px-4"></td>
+                            <td class="py-3 px-4 text-center">
+                                <a th:href="@{/admin/teams/update/{id}(id=${team.id})}"
+                                   class="text-blue-300 hover:text-blue-200 mr-3 transition-colors">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a th:href="@{/admin/teams/delete/{id}(id=${team.id})}"
+                                   th:onclick="'return confirm(\''+#{confirm.delete.team}+'\')'"
+                                   class="text-red-400 hover:text-red-300 transition-colors">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div th:if="${totalPages > 1}" class="flex justify-center mt-6 space-x-2">
+                        <span th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}">
+                            <a th:href="@{/admin/teams(page=${pageNumber}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                               th:text="${pageNumber + 1}"
+                               th:class="${pageNumber == currentPage ? 'bg-blue-600 text-white' : 'text-white hover:bg-white hover:bg-opacity-20'} px-3 py-2 rounded-md transition-all duration-300">
+                            </a>
+                        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

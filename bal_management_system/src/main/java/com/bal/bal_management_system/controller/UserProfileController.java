@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
 
 @Controller
 @RequestMapping("/user/profile")
@@ -70,7 +73,7 @@ public class UserProfileController {
 
         if (file != null && !file.isEmpty()) {
             try {
-                String uploadDir = "C:/Users/USER/Documents/Uploads/";
+                String uploadDir = "/home/ec2-user/Uploads/"; // New directory
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 String filePath = uploadDir + fileName;
                 file.transferTo(new File(filePath));
@@ -89,4 +92,5 @@ public class UserProfileController {
 
         return "redirect:/user_dashboard";
     }
+
 }

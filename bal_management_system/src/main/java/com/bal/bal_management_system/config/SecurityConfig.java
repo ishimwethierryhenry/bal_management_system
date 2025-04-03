@@ -11,14 +11,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthenticationInterceptor())
                 .excludePathPatterns("/", "/login", "/register", "/logout",
                         "/aboutBal", "/matches", "/standings",
                         "/stats", "/players", "/gallery",
-                        "/css/**", "/js/**", "/images/**", "/uploads/**");
+                        "/css/**", "/js/**", "/images/**", "/uploads/**",
+                        "/reset-password/**", "/changeLanguage", "/forgot-password",
+                        "/admin/gallery", "/admin/gallery/**"); // Add these paths
     }
 }
 

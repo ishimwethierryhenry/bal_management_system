@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Edit Match - Basketball Africa League</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" th:href="@{/images/bal_image.jpeg}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55));
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header>
+    <nav class="glass-effect sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="/images/uppermostlogo.jpg" alt="BAL Logo" class="h-8 w-auto mr-2">
+                    <span class="text-white text-xl font-semibold hidden sm:block">Basketball Africa League</span>
+                    <span class="text-white text-xl font-semibold sm:hidden">BAL</span>
+                </div>
+                <nav th:replace="~{fragments/nav :: nav}"></nav>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="glass-effect rounded-xl shadow-2xl">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center mb-6">
+                    <a href="/admin/matches" class="text-blue-200 hover:text-blue-100 flex items-center">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Matches
+                    </a>
+                </div>
+
+                <h2 class="text-3xl font-bold text-white text-center mb-8"> Edit Match</h2>
+
+                <form th:action="@{/admin/matches/edit/{id}(id=${match.id})}" method="post" enctype="multipart/form-data" th:object="${match}" class="space-y-6">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="grid grid-cols-1 gap-6">
+                        <!-- Home Team -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Home Team *</label>
+                            <select th:field="*{homeTeam}" required class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2">
+                                <option value="">Select Home Team</option>
+                                <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}" th:selected="${team.id == match.homeTeam.id}"></option>
+                            </select>
+                        </div>
+
+                        <!-- Away Team -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Away Team *</label>
+                            <select th:field="*{awayTeam}" required class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2">
+                                <option value="">Select Away Team</option>
+                                <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}" th:selected="${team.id == match.awayTeam.id}"></option>
+                            </select>
+                        </div>
+
+                        <!-- Match Date Time -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Match Date and Time *</label>
+                            <input type="datetime-local"
+                                   th:field="*{matchDateTime}"
+                                   required
+                                   class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2"
+                                   th:value="${#temporals.format(match.matchDateTime, 'yyyy-MM-dd''T''HH:mm')}">
+                        </div>
+
+                        <!-- Venue -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Venue *</label>
+                            <input type="text" th:field="*{venue}" required class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2">
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Description</label>
+                            <textarea th:field="*{description}" rows="4" class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2"></textarea>
+                        </div>
+
+                        <!-- Current Flyer Image -->
+                        <div th:if="${match.flyerImage}">
+                            <label class="block text-sm font-medium text-blue-200">Current Flyer</label>
+                            <img th:src="${match.flyerImage}" alt="Match Flyer" class="h-32 w-auto mt-2">
+                        </div>
+
+                        <!-- New Flyer Image -->
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200">Update Flyer</label>
+                            <input type="file" name="flyerFile" accept="image/*" class="mt-1 block w-full glass-effect rounded-md text-white px-3 py-2">
+                        </div>
+                    </div>
+
+                    <div class="pt-5 flex justify-end space-x-3">
+                        <a href="/admin/matches" class="px-4 py-2 text-sm font-medium text-blue-300 hover:text-blue-200">Cancel</a>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-save mr-2"></i>Update Match
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+    <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

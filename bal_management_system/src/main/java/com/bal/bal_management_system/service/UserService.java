@@ -162,7 +162,7 @@ public class UserService {
         saveResetTokenForUser(user.get(), token); // Pass the UserEntity instead of Optional
 
         // Generate reset URL
-        String resetUrl = "http://bal_management_system.onrender.com/reset-password?token=" + token;
+        String resetUrl = "http://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/reset-password?token=" + token;
 
         // Retrieve user's first and last name
         String firstName = user.get().getFirstName(); // Assumes UserEntity has a getFirstName() method

@@ -1,3 +1,5 @@
+<!--admin_dashboard.html-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -5,14 +7,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="#{app.title}">React Admin Dashboard</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K">
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-gradient-to-r from-gray-900 to-gray-800 text-gray-100 min-h-screen flex">
+    <style>
+        /* Custom styles for modal */
+        .modal-open {
+            overflow: hidden;
+            padding-right: 15px; /* Prevents layout shift when scrollbar disappears */
+        }
+
+        /* Make sure modal is scrollable on smaller screens */
+        .modal-container {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Responsive adjustments for sidebar */
+        @media (max-width: 1024px) {
+            .sidebar-mobile {
+                position: fixed;
+                z-index: 50;
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .sidebar-mobile.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-mobile.closed {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Ensure main content is scrollable */
+        .main-content {
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Better responsive grid for stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Responsive chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head><body class="bg-gradient-to-r from-gray-900 to-gray-800 text-gray-100 min-h-screen flex">
 <!-- Mobile Menu Toggle -->
 <button class="lg:hidden fixed top-4 left-4 z-50 text-white text-2xl focus:outline-none">
     <i class="fas fa-bars"></i>
@@ -23,11 +71,63 @@
     <div class="flex flex-col h-full">
         <!-- Profile Section -->
         <div class="p-4 text-center border-b border-gray-700">
-            <img th:src="${session.loggedInUser.profilePicturePath != null ? session.loggedInUser.profilePicturePath : '/api/placeholder/80/80'}"
-                 alt="Profile"
-                 class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-blue-500">
+            <div class="relative w-20 h-20 mx-auto mb-3">
+                <img
+                        id="profileImage"
+                        th:src="${session.loggedInUser.profilePicturePath}"
+                        th:onerror="'this.onerror = null; this.src=\'/images/default-profile.svg\';'"
+                        alt="Profile"
+                        class="rounded-full w-full h-full border-2 border-blue-500 cursor-pointer"
+                        onclick="showImageViewer()"
+                />
+                <span
+                        th:if="${session.loggedInUser.profilePicturePath == null || session.loggedInUser.profilePicturePath == '/images/default-profile.svg'}"                        class="absolute bottom-0 left-0 right-0 text-xs text-gray-400 bg-gray-800 bg-opacity-75 py-1 rounded-b-full"
+                >
+            <span th:text="#{profile.no.picture}">No profile picture</span>
+        </span>
+            </div>
             <h3 class="text-lg font-semibold" th:text="${session.loggedInUser.firstName + ' ' + session.loggedInUser.lastName}">Admin Name</h3>
             <p class="text-sm text-blue-400" th:text="#{user.profile.role}">Super Admin</p>
+        </div>
+
+        <!-- Image Viewer Modal -->
+        <div
+                id="imageViewerModal"
+                class="fixed inset-0 hidden z-50 overflow-y-auto"
+                aria-labelledby="modal-title"
+                role="dialog"
+                aria-modal="true"
+        >
+            <div class="min-h-screen px-4 text-center">
+                <!-- Background overlay -->
+                <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+                <!-- Modal panel -->
+                <div class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+                    <div class="modal-container p-6">
+                        <img
+                                id="imageViewer"
+                                th:src="${session.loggedInUser.profilePicturePath}"
+                                alt="Preview"
+                                class="w-full h-auto rounded-lg max-h-[70vh] object-contain mx-auto"
+                        />
+                        <div class="mt-4 flex justify-between">
+                            <button
+                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                                    onclick="downloadImage()"
+                            >
+                                Download
+                            </button>
+                            <button
+                                    class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                                    onclick="closeImageViewer()"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Navigation -->
@@ -41,10 +141,30 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="ml-3" th:text="#{nav.user.management}">User Management</span>
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                <a th:href="@{/admin/teams}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
                     <i class="fas fa-basketball-ball w-5"></i>
                     <span class="ml-3" th:text="#{nav.teams}">Teams</span>
                 </a>
+
+                <a th:href="@{/admin/players}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-running w-5"></i>
+                    <span class="ml-3">Players Management</span>
+                </a>
+
+                <a th:href="@{/admin/gallery}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-images w-5"></i>
+                    <span class="ml-3">Gallery Management</span>
+                </a>
+
+                <a th:href="@{/admin/matches}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                    <i class="fas fa-calendar w-5"></i>
+                    <span class="ml-3">Match Management</span>
+                </a>
+<!--                <a th:href="@{/admin/gallery/upload}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">-->
+<!--                    <i class="fas fa-upload w-5"></i>-->
+<!--                    <span class="ml-3">Upload Image</span>-->
+<!--                </a>-->
+
             </div>
         </nav>
 
@@ -166,9 +286,24 @@
             </div>
         </div>
     </div>
+    <footer class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 mt-16">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-400">
+            <p th:text="#{about.bal.footer.text}">&copy; 2024 Basketball Africa League. All Rights Reserved.</p>
+        </div>
+    </footer>
 </div>
 
+
+
 <script>
+
+    function downloadImage() {
+        const imagePath = document.getElementById('profileImage').src;
+        const link = document.createElement('a');
+        link.href = imagePath;
+        link.download = 'profile_picture.jpg';
+        link.click();
+    }
     // Mobile menu toggle
     const mobileToggle = document.querySelector('.lg\\:hidden');
     const sidebar = document.querySelector('.fixed');
@@ -282,6 +417,49 @@
                 alert('Error sending notification. Please try again.');
             });
     });
+
+    // Add these functions to your existing script section
+    function showImageViewer() {
+        const modal = document.getElementById('imageViewerModal');
+        const imageViewer = document.getElementById('imageViewer');
+        const profileImage = document.getElementById('profileImage');
+
+        // Set the source of the modal image
+        imageViewer.src = profileImage.src;
+
+        // Show the modal and add body class
+        modal.classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeImageViewer() {
+        const modal = document.getElementById('imageViewerModal');
+
+        // Hide the modal and remove body class
+        modal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeImageViewer();
+        }
+    });
+
+    // Close modal on background click
+    document.getElementById('imageViewerModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeImageViewer();
+        }
+    });
+
+    // Prevent modal content clicks from closing the modal
+    document.querySelector('.modal-container').addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+
+
 </script>
 </body>
 </html>
