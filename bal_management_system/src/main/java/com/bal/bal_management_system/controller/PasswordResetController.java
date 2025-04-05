@@ -37,7 +37,7 @@ public class PasswordResetController {
         boolean emailSent = userService.sendPasswordResetEmail(email);
 
         if (emailSent) {
-            model.addAttribute("message", "A reset link has been sent to the email provided, Please make sure you can access the email then click to the link sent to reset your account's password.");
+            model.addAttribute("message", "A reset link has been sent to the email provided, Please make sure you can access the email notably the SPAM Folder then click to the link sent to reset your account's password.");
         } else {
             model.addAttribute("error", "Failed to send email. Please try again.");
         }

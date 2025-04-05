@@ -19,12 +19,12 @@ Information-Technology(IT)-Software Engineering
 
 
 
-LINK TO THE HOSTED WEBSITE:http://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/
+LINK TO THE HOSTED WEBSITE:https://bal-management-system.onrender.com/
 
 
 NOTES:
 
-1.Please make sure to follow that link [http://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/] and not [https://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/] because I do not have SSL/TLS Certificate for my web-app[but,still applying for it].So, it is highly recommended to use http://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/ as I ensure you there is no vulnerabilities on my Web-App
+1.Please make sure to follow that link [https://bal-management-system.onrender.com/] and not [https://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000/] because I do not have SSL/TLS Certificate for my web-app[but,still applying for it].So, it is highly recommended to use https://bal-management-system.onrender.com/ as I ensure you there is no vulnerabilities on my Web-App
 
 =>Henceforth, beware that the web browser by default can add an 's' to the 'http' to apply security policies.Please, in that case,make sure to edit the link from the url in the browser to adhere to the initial link and hit enter.
 
@@ -73,4 +73,4 @@ password: 123
 
 Just in case time is a limitation, otherwise you can check everything on my web-app
 
-http://ec2-13-60-50-63.eu-north-1.compute.amazonaws.com:3000
+https://bal-management-system.onrender.com/
